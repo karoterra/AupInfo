@@ -1,0 +1,32 @@
+root = true
+
+# All files
+[*]
+indent_style = space
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Each file extensions
+[*.xml]
+indent_size = 2
+
+[.json]
+indent_size = 2
+
+[*.sln]
+indent_style = tab
+indent_size = 2
+
+[*.{csproj,proj,projitems,shproj}]
+indent_size = 2
+
+[*.{props,targets}]
+indent_size = 2
+
+[*.xaml]
+indent_size = 2
+
+[*.cs]
+indent_size = 4
+
+dotnet_sort_system_directives_first = true
