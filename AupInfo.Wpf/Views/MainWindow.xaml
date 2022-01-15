@@ -7,6 +7,7 @@
                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                    xmlns:prism="http://prismlibrary.com/"
                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+                   xmlns:rp="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
                    xmlns:vm="clr-namespace:AupInfo.Wpf.ViewModels"
                    xmlns:local="clr-namespace:AupInfo.Wpf"
                    prism:ViewModelLocator.AutoWireViewModel="True"
@@ -24,8 +25,96 @@
     <i:EventTrigger EventName="Closed">
       <local:DataContextDisposeAction/>
     </i:EventTrigger>
+    <i:EventTrigger EventName="Loaded">
+      <rp:EventToReactiveCommand Command="{Binding Loaded}"/>
+    </i:EventTrigger>
   </i:Interaction.Triggers>
-  <Grid>
 
-  </Grid>
+  <metro:MetroWindow.Resources>
+    <CollectionViewSource x:Key="PanelItemsSrc" Source="{Binding PanelItems}">
+      <CollectionViewSource.GroupDescriptions>
+        <PropertyGroupDescription PropertyName="Category"/>
+      </CollectionViewSource.GroupDescriptions>
+    </CollectionViewSource>
+  </metro:MetroWindow.Resources>
+
+  <md:DialogHost>
+    <md:DrawerHost IsLeftDrawerOpen="{Binding IsMenuOpen.Value}"
+                   OpenMode="{Binding DrawerOpenMode.Value}">
+      <md:DrawerHost.LeftDrawerContent>
+        <DockPanel MinWidth="180">
+          <StackPanel Orientation="Horizontal"
+                      DockPanel.Dock="Top"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Top">
+            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                          ToolTip="メニューを開いたままにする"
+                          IsChecked="{Binding IsModeless.Value}">
+              <md:PackIcon Kind="Pin"
+                           RenderTransformOrigin=".5,.5">
+                <md:PackIcon.RenderTransform>
+                  <RotateTransform Angle="45" />
+                </md:PackIcon.RenderTransform>
+              </md:PackIcon>
+              <md:ToggleButtonAssist.OnContent>
+                <md:PackIcon Kind="Pin" />
+              </md:ToggleButtonAssist.OnContent>
+            </ToggleButton>
+            <ToggleButton Margin="16"
+                          Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                          IsChecked="{Binding IsMenuOpen.Value}"/>
+          </StackPanel>
+
+          <ListBox Margin="0 0 0 16"
+                   ItemsSource="{Binding Source={StaticResource PanelItemsSrc}}"
+                   SelectedIndex="{Binding SelectedIndex.Value}"
+                   SelectedItem="{Binding SelectedItem.Value}"
+                   Style="{StaticResource MaterialDesignNavigationPrimaryListBox}">
+            <ListBox.GroupStyle>
+              <GroupStyle>
+                <GroupStyle.HeaderTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Name}"
+                               Margin="16 4 0 0"
+                               Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                  </DataTemplate>
+                </GroupStyle.HeaderTemplate>
+              </GroupStyle>
+            </ListBox.GroupStyle>
+            <ListBox.ItemTemplate>
+              <DataTemplate DataType="{x:Type vm:PanelItemViewModel}">
+                <TextBlock Text="{Binding Name}" Margin="16 0 0 0">
+                  <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                      <rp:EventToReactiveCommand Command="{Binding PreviewMouseLeftButtonUp}"/>
+                    </i:EventTrigger>
+                  </i:Interaction.Triggers>
+                </TextBlock>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+      </md:DrawerHost.LeftDrawerContent>
+
+      <DockPanel>
+        <md:ColorZone Padding="16"
+                      DockPanel.Dock="Top"
+                      md:ShadowAssist.ShadowDepth="Depth2"
+                      Mode="PrimaryLight">
+          <DockPanel>
+            <StackPanel Orientation="Horizontal">
+              <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                            IsChecked="{Binding IsMenuOpen.Value}"/>
+            </StackPanel>
+            <TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Text="{Binding Subtitle.Value}"/>
+          </DockPanel>
+        </md:ColorZone>
+
+        <ContentControl prism:RegionManager.RegionName="ContentRegion"/>
+      </DockPanel>
+    </md:DrawerHost>
+  </md:DialogHost>
 </metro:MetroWindow>

@@ -18,6 +18,8 @@ namespace AupInfo.Wpf
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterForNavigation<EditHandlePanel>();
+            containerRegistry.RegisterForNavigation<FilterProjectPanel>();
         }
     }
 }

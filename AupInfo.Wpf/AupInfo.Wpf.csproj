@@ -13,6 +13,7 @@
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.0" />
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
     <PackageReference Include="ReactiveProperty" Version="8.0.3" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="8.0.3" />
   </ItemGroup>
 
 </Project>
