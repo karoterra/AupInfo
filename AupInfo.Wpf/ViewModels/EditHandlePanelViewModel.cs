@@ -19,7 +19,7 @@ namespace AupInfo.Wpf.ViewModels
         public ReactivePropertySlim<int> FrameNum { get; }
         public ReactivePropertySlim<string> TimeLength { get; }
 
-        private CompositeDisposable disposables = new();
+        private readonly CompositeDisposable disposables = new();
 
         public EditHandlePanelViewModel()
         {

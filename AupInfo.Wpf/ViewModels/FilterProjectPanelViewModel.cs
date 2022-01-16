@@ -10,7 +10,7 @@ namespace AupInfo.Wpf.ViewModels
     {
         public ReactiveCollection<string> Filters { get; }
 
-        private CompositeDisposable disposables = new();
+        private readonly CompositeDisposable disposables = new();
 
         public FilterProjectPanelViewModel()
         {

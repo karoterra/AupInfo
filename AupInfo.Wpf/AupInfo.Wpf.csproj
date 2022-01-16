@@ -16,4 +16,8 @@
     <PackageReference Include="ReactiveProperty.WPF" Version="8.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AupInfo.Core\AupInfo.Core.csproj" />
+  </ItemGroup>
+
 </Project>

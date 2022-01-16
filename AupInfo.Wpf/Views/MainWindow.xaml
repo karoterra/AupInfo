@@ -20,13 +20,21 @@
                    FontFamily="{md:MaterialDesignFont}"
                    BorderThickness="1"
                    TitleCharacterCasing="Normal"
-                   Title="{Binding Title.Value}" Height="450" Width="800">
+                   TitleAlignment="Center"
+                   Title="{Binding Title.Value}" Height="450" Width="800"
+                   AllowDrop="True">
   <i:Interaction.Triggers>
     <i:EventTrigger EventName="Closed">
       <local:DataContextDisposeAction/>
     </i:EventTrigger>
     <i:EventTrigger EventName="Loaded">
       <rp:EventToReactiveCommand Command="{Binding Loaded}"/>
+    </i:EventTrigger>
+    <i:EventTrigger EventName="PreviewDragOver">
+      <rp:EventToReactiveCommand Command="{Binding DragOver}"/>
+    </i:EventTrigger>
+    <i:EventTrigger EventName="Drop">
+      <rp:EventToReactiveCommand Command="{Binding Drop}"/>
     </i:EventTrigger>
   </i:Interaction.Triggers>
 
@@ -38,7 +46,16 @@
     </CollectionViewSource>
   </metro:MetroWindow.Resources>
 
-  <md:DialogHost>
+  <metro:MetroWindow.LeftWindowCommands>
+    <metro:WindowCommands>
+      <TextBlock Text="{Binding Filename.Value}"
+                 ToolTip="{Binding FilePath.Value}"
+                 VerticalAlignment="Center"
+                 Margin="8 0 8 0"/>
+    </metro:WindowCommands>
+  </metro:MetroWindow.LeftWindowCommands>
+
+  <md:DialogHost SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
     <md:DrawerHost IsLeftDrawerOpen="{Binding IsMenuOpen.Value}"
                    OpenMode="{Binding DrawerOpenMode.Value}">
       <md:DrawerHost.LeftDrawerContent>
@@ -113,7 +130,18 @@
           </DockPanel>
         </md:ColorZone>
 
-        <ContentControl prism:RegionManager.RegionName="ContentRegion"/>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+
+          <ContentControl prism:RegionManager.RegionName="ContentRegion"/>
+          
+          <md:Snackbar x:Name="MainSnackbar"
+                       MessageQueue="{Binding SnackbarMessageQueue}"
+                       Grid.Row="1"/>
+        </Grid>
       </DockPanel>
     </md:DrawerHost>
   </md:DialogHost>

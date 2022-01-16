@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using System.Windows.Input;
 using Prism.Mvvm;
-using Reactive.Bindings;
 
 namespace AupInfo.Wpf.ViewModels
 {
@@ -11,13 +10,13 @@ namespace AupInfo.Wpf.ViewModels
         public string Category { get; }
         public string Navigation { get; }
 
-        public ReactiveCommand<MouseButtonEventArgs> PreviewMouseLeftButtonUp { get; }
+        public ICommand PreviewMouseLeftButtonUp { get; }
 
         private readonly CompositeDisposable disposables = new();
 
         public PanelItemViewModel(
             string name, string category, string navigation,
-            ReactiveCommand<MouseButtonEventArgs> previewMouseLeftButtonUp)
+            ICommand previewMouseLeftButtonUp)
         {
             Name = name;
             Category = category;

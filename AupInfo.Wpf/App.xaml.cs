@@ -1,7 +1,8 @@
 ﻿using System.Text;
 using System.Windows;
-using Prism.Ioc;
 using AupInfo.Wpf.Views;
+using Prism.Ioc;
+using Prism.Modularity;
 
 namespace AupInfo.Wpf
 {
@@ -13,6 +14,7 @@ namespace AupInfo.Wpf
         protected override Window CreateShell()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Container.Resolve<IModuleManager>().LoadModule<Core.CoreModule>();
             return Container.Resolve<MainWindow>();
         }
 
@@ -20,6 +22,11 @@ namespace AupInfo.Wpf
         {
             containerRegistry.RegisterForNavigation<EditHandlePanel>();
             containerRegistry.RegisterForNavigation<FilterProjectPanel>();
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            moduleCatalog.AddModule<Core.CoreModule>(InitializationMode.OnDemand);
         }
     }
 }

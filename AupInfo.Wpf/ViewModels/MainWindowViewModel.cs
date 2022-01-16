@@ -1,11 +1,14 @@
-﻿using System.Reactive.Disposables;
+﻿using System.IO;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows;
+using System.Windows.Input;
+using AupInfo.Core;
 using MaterialDesignThemes.Wpf;
 using Prism.Mvvm;
 using Prism.Regions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using System.Windows.Input;
 
 namespace AupInfo.Wpf.ViewModels
 {
@@ -13,6 +16,8 @@ namespace AupInfo.Wpf.ViewModels
     {
         public ReactivePropertySlim<string> Title { get; }
         public ReactivePropertySlim<string> Subtitle { get; }
+        public ReadOnlyReactivePropertySlim<string?> FilePath { get; }
+        public ReadOnlyReactivePropertySlim<string?> Filename { get; }
 
         public ReactivePropertySlim<bool> IsMenuOpen { get; }
         public ReactivePropertySlim<bool> IsModeless { get; }
@@ -24,16 +29,24 @@ namespace AupInfo.Wpf.ViewModels
 
         public ReactiveCommand Loaded { get; }
         public ReactiveCommand<MouseButtonEventArgs> SelectedItemClicked { get; }
+        public ReactiveCommand<DragEventArgs> Drop { get; }
+        public ReactiveCommand<DragEventArgs> DragOver { get; }
+
+        public SnackbarMessageQueue SnackbarMessageQueue { get; } = new();
 
         private readonly CompositeDisposable disposables = new();
         private readonly IRegionManager regionManager;
+        private readonly AupFile aup;
 
-        public MainWindowViewModel(IRegionManager regionManager)
+        public MainWindowViewModel(IRegionManager regionManager, AupFile aup)
         {
             this.regionManager = regionManager;
+            this.aup = aup;
 
             Title = new ReactivePropertySlim<string>("AupInfo").AddTo(disposables);
             Subtitle = new ReactivePropertySlim<string>("Title").AddTo(disposables);
+            FilePath = this.aup.FilePath.ToReadOnlyReactivePropertySlim().AddTo(disposables);
+            Filename = this.aup.FileName.ToReadOnlyReactivePropertySlim().AddTo(disposables);
             IsMenuOpen = new ReactivePropertySlim<bool>(false).AddTo(disposables);
             IsModeless = new ReactivePropertySlim<bool>(false).AddTo(disposables);
             PanelItems = new ReactiveCollection<PanelItemViewModel>().AddTo(disposables);
@@ -60,6 +73,23 @@ namespace AupInfo.Wpf.ViewModels
                 })
                 .AddTo(disposables);
 
+            DragOver = new ReactiveCommand<DragEventArgs>()
+                .WithSubscribe(e =>
+                {
+                    e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+                    e.Handled = true;
+                })
+                .AddTo(disposables);
+            Drop = new ReactiveCommand<DragEventArgs>()
+                .WithSubscribe(e =>
+                {
+                    if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+                    var files = e.Data.GetData(DataFormats.FileDrop) as string[];
+                    OpenAup(files![0]);
+                })
+                .AddTo(disposables);
+
             SelectedItem.Subscribe(item =>
             {
                 if (!string.IsNullOrEmpty(item?.Navigation))
@@ -78,6 +108,60 @@ namespace AupInfo.Wpf.ViewModels
             PanelItems.Add(new("シーン", "拡張編集", "", SelectedItemClicked));
             PanelItems.Add(new("フォント", "拡張編集", "", SelectedItemClicked));
             PanelItems.Add(new("ファイル", "PSDToolKit", "", SelectedItemClicked));
+        }
+
+        private void OpenAup(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                SnackbarMessageQueue.Enqueue($"\"{path}\" はディレクトリです。");
+                return;
+            }
+
+            try
+            {
+                aup.Open(path);
+                SnackbarMessageQueue.Enqueue($"\"{path}\" を開きました。");
+            }
+            catch (FileNotFoundException)
+            {
+                SnackbarMessageQueue.Enqueue($"\"{path}\" が見つかりません。");
+                aup.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                SnackbarMessageQueue.Enqueue($"\"{path}\" へのアクセス許可がありません。");
+                aup.Close();
+            }
+            catch (PathTooLongException)
+            {
+                SnackbarMessageQueue.Enqueue("パスが長すぎます。");
+                aup.Close();
+            }
+            catch (Exception e) when (
+                e is ArgumentException or
+                ArgumentNullException or
+                DirectoryNotFoundException or
+                NotSupportedException)
+            {
+                SnackbarMessageQueue.Enqueue("有効なパスを指定してください。");
+                aup.Close();
+            }
+            catch (FileFormatException)
+            {
+                SnackbarMessageQueue.Enqueue($"\"{path}\" はAviUtlプロジェクトファイルでないか破損している可能性があります。");
+                aup.Close();
+            }
+            catch (EndOfStreamException)
+            {
+                SnackbarMessageQueue.Enqueue($"\"{path}\" はAviUtlプロジェクトファイルでないか破損している可能性があります。");
+                aup.Close();
+            }
+            catch (IOException)
+            {
+                SnackbarMessageQueue.Enqueue("IOエラーが発生しました。");
+                aup.Close();
+            }
         }
 
         #region IDisposable
