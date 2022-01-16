@@ -131,16 +131,15 @@
         </md:ColorZone>
 
         <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
+          <ScrollViewer md:ScrollViewerAssist.IsAutoHideEnabled="True"
+                        HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility.Value}"
+                        VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility.Value}">
+            <ContentControl prism:RegionManager.RegionName="ContentRegion"
+                            Margin="{Binding ContentMargin.Value}"/>
+          </ScrollViewer>
 
-          <ContentControl prism:RegionManager.RegionName="ContentRegion"/>
-          
           <md:Snackbar x:Name="MainSnackbar"
-                       MessageQueue="{Binding SnackbarMessageQueue}"
-                       Grid.Row="1"/>
+                       MessageQueue="{Binding SnackbarMessageQueue}"/>
         </Grid>
       </DockPanel>
     </md:DrawerHost>

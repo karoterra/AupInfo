@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using AupInfo.Core;
 using MaterialDesignThemes.Wpf;
@@ -18,6 +19,10 @@ namespace AupInfo.Wpf.ViewModels
         public ReactivePropertySlim<string> Subtitle { get; }
         public ReadOnlyReactivePropertySlim<string?> FilePath { get; }
         public ReadOnlyReactivePropertySlim<string?> Filename { get; }
+
+        public ReadOnlyReactivePropertySlim<Thickness> ContentMargin { get; }
+        public ReadOnlyReactivePropertySlim<ScrollBarVisibility> HorizontalScrollBarVisibility { get; }
+        public ReadOnlyReactivePropertySlim<ScrollBarVisibility> VerticalScrollBarVisibility { get; }
 
         public ReactivePropertySlim<bool> IsMenuOpen { get; }
         public ReactivePropertySlim<bool> IsModeless { get; }
@@ -52,6 +57,19 @@ namespace AupInfo.Wpf.ViewModels
             PanelItems = new ReactiveCollection<PanelItemViewModel>().AddTo(disposables);
             SelectedIndex = new ReactivePropertySlim<int>(-1).AddTo(disposables);
             SelectedItem = new ReactivePropertySlim<PanelItemViewModel?>(null).AddTo(disposables);
+
+            ContentMargin = SelectedItem
+                .Select(x => x?.Margin ?? new Thickness(8))
+                .ToReadOnlyReactivePropertySlim()
+                .AddTo(disposables);
+            HorizontalScrollBarVisibility = SelectedItem
+                .Select(x => x?.HorizontalScrollBarVisibility ?? ScrollBarVisibility.Auto)
+                .ToReadOnlyReactivePropertySlim()
+                .AddTo(disposables);
+            VerticalScrollBarVisibility = SelectedItem
+                .Select(x => x?.VerticalScrollBarVisibility ?? ScrollBarVisibility.Auto)
+                .ToReadOnlyReactivePropertySlim()
+                .AddTo(disposables);
 
             DrawerOpenMode = IsModeless
                 .Select(x => x ? DrawerHostOpenMode.Standard : DrawerHostOpenMode.Modal)
@@ -103,11 +121,7 @@ namespace AupInfo.Wpf.ViewModels
                 }
             }).AddTo(disposables);
 
-            PanelItems.Add(new("エディットハンドル", "", "EditHandlePanel", SelectedItemClicked));
-            PanelItems.Add(new("フィルタプラグイン", "", "FilterProjectPanel", SelectedItemClicked));
-            PanelItems.Add(new("シーン", "拡張編集", "", SelectedItemClicked));
-            PanelItems.Add(new("フォント", "拡張編集", "", SelectedItemClicked));
-            PanelItems.Add(new("ファイル", "PSDToolKit", "", SelectedItemClicked));
+            PanelItems.AddRangeOnScheduler(GetPanelItems());
         }
 
         private void OpenAup(string path)
@@ -162,6 +176,20 @@ namespace AupInfo.Wpf.ViewModels
                 SnackbarMessageQueue.Enqueue("IOエラーが発生しました。");
                 aup.Close();
             }
+        }
+
+        private IEnumerable<PanelItemViewModel> GetPanelItems()
+        {
+            yield return new("エディットハンドル", "", "EditHandlePanel", SelectedItemClicked);
+            yield return new("フィルタプラグイン", "", "FilterProjectPanel", SelectedItemClicked)
+            {
+                Margin = new Thickness(8, 8, 0, 8),
+                RequireHorizontalScroll = false,
+                RequireVerticalScroll = false,
+            };
+            yield return new("シーン", "拡張編集", "", SelectedItemClicked);
+            yield return new("フォント", "拡張編集", "", SelectedItemClicked);
+            yield return new("ファイル", "PSDToolKit", "", SelectedItemClicked);
         }
 
         #region IDisposable

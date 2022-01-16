@@ -10,10 +10,13 @@
              d:DataContext="{d:DesignInstance vm:FilterProjectPanelViewModel}"
              d:DesignHeight="450" d:DesignWidth="800"
              prism:ViewModelLocator.AutoWireViewModel="True">
-  <Grid Margin="16">
+  <Grid>
     <ListBox ItemsSource="{Binding Filters}"
-             Style="{StaticResource MaterialDesignCardsListBox}">
-      <ListBox.ItemTemplate>
+             Style="{StaticResource MaterialDesignCardsListBox}"
+             VirtualizingPanel.IsVirtualizing="True"
+             VirtualizingPanel.ScrollUnit="Pixel"
+             ScrollViewer.VerticalScrollBarVisibility="Auto">
+      <ItemsControl.ItemTemplate>
         <DataTemplate DataType="{x:Type vm:FilterProjectItemViewModel}">
           <DockPanel Margin="8">
             <StackPanel DockPanel.Dock="Left"
@@ -30,7 +33,7 @@
             </Button>
           </DockPanel>
         </DataTemplate>
-      </ListBox.ItemTemplate>
+      </ItemsControl.ItemTemplate>
     </ListBox>
   </Grid>
 </UserControl>
