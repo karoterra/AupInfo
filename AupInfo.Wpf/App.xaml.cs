@@ -23,8 +23,10 @@ namespace AupInfo.Wpf
             containerRegistry.RegisterForNavigation<EditHandlePanel>();
             containerRegistry.RegisterForNavigation<FilterProjectPanel>();
             containerRegistry.RegisterForNavigation<ExEditScenePanel>();
+            containerRegistry.RegisterForNavigation<ExEditFontPanel>();
 
             containerRegistry.RegisterSingleton<Services.SaveFileDialogService>();
+            containerRegistry.RegisterSingleton<Repositories.FontInfoRepository>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
