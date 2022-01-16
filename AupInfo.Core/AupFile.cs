@@ -48,6 +48,7 @@ namespace AupInfo.Core
         public void Open(string path)
         {
             aup = new(path);
+            EditHandle.Value = aup.EditHandle;
             filepath.Value = path;
 
             FilterProjects.ClearOnScheduler();
@@ -66,6 +67,7 @@ namespace AupInfo.Core
         {
             aup = null;
             ExEdit.Value = null;
+            EditHandle.Value = null;
             FilterProjects.ClearOnScheduler();
             filepath.Value = null;
         }
