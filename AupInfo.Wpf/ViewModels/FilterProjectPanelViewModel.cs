@@ -1,4 +1,6 @@
 ﻿using System.Reactive.Disposables;
+using AupInfo.Core;
+using AupInfo.Wpf.Services;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Reactive.Bindings;
@@ -8,18 +10,20 @@ namespace AupInfo.Wpf.ViewModels
 {
     public class FilterProjectPanelViewModel : BindableBase, IDestructible
     {
-        public ReactiveCollection<string> Filters { get; }
+        public ReadOnlyReactiveCollection<FilterProjectItemViewModel> Filters { get; }
 
         private readonly CompositeDisposable disposables = new();
+        private readonly AupFile aup;
+        private readonly SaveFileDialogService saveFileDialogService;
 
-        public FilterProjectPanelViewModel()
+        public FilterProjectPanelViewModel(AupFile _aup, SaveFileDialogService _saveFileDialogService)
         {
-            Filters = new ReactiveCollection<string>().AddTo(disposables);
+            aup = _aup;
+            saveFileDialogService = _saveFileDialogService;
 
-            Filters.Add("拡張編集");
-            Filters.Add("ごちゃまぜドロップス");
-            Filters.Add("PSDToolKit");
-            Filters.Add("拡張編集RAMプレビュー");
+            Filters = aup.FilterProjects
+                .ToReadOnlyReactiveCollection(f => new FilterProjectItemViewModel(f, aup.FilePath.Value!, saveFileDialogService))
+                .AddTo(disposables);
         }
 
         public void Destroy()

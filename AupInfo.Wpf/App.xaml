@@ -40,6 +40,7 @@
       <SolidColorBrush x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10" Color="{DynamicResource Primary500Foreground}" />
 
       <converter:NullableToVisibilityConverter x:Key="NullableToVisibility"/>
+      <converter:ToReadableSizeConverter x:Key="ToReadableSize"/>
     </ResourceDictionary>
   </Application.Resources>
 </prism:PrismApplication>

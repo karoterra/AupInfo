@@ -22,6 +22,8 @@ namespace AupInfo.Wpf
         {
             containerRegistry.RegisterForNavigation<EditHandlePanel>();
             containerRegistry.RegisterForNavigation<FilterProjectPanel>();
+
+            containerRegistry.RegisterSingleton<Services.SaveFileDialogService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
