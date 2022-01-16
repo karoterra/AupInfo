@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using AupInfo.Core;
+using AupInfo.Wpf.Views;
 using MaterialDesignThemes.Wpf;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using Reactive.Bindings;
@@ -41,12 +43,16 @@ namespace AupInfo.Wpf.ViewModels
 
         private readonly CompositeDisposable disposables = new();
         private readonly IRegionManager regionManager;
+        private readonly MainSnackbarEvent snackbarEvent;
         private readonly AupFile aup;
 
-        public MainWindowViewModel(IRegionManager regionManager, AupFile aup)
+        public MainWindowViewModel(IRegionManager regionManager, IEventAggregator ea, AupFile aup)
         {
             this.regionManager = regionManager;
+            snackbarEvent = ea.GetEvent<MainSnackbarEvent>();
             this.aup = aup;
+
+            snackbarEvent.Subscribe(EnqueueSnackbarMessage);
 
             Title = new ReactivePropertySlim<string>("AupInfo").AddTo(disposables);
             Subtitle = new ReactivePropertySlim<string>("Title").AddTo(disposables);
@@ -178,16 +184,26 @@ namespace AupInfo.Wpf.ViewModels
             }
         }
 
+        private void EnqueueSnackbarMessage(Action<ISnackbarMessageQueue> action)
+        {
+            action.Invoke(SnackbarMessageQueue);
+        }
+
         private IEnumerable<PanelItemViewModel> GetPanelItems()
         {
-            yield return new("エディットハンドル", "", "EditHandlePanel", SelectedItemClicked);
-            yield return new("フィルタプラグイン", "", "FilterProjectPanel", SelectedItemClicked)
+            yield return new("エディットハンドル", "", nameof(EditHandlePanel), SelectedItemClicked);
+            yield return new("フィルタプラグイン", "", nameof(FilterProjectPanel), SelectedItemClicked)
             {
                 Margin = new Thickness(8, 8, 0, 8),
                 RequireHorizontalScroll = false,
                 RequireVerticalScroll = false,
             };
-            yield return new("シーン", "拡張編集", "", SelectedItemClicked);
+            yield return new("シーン", "拡張編集", nameof(ExEditScenePanel), SelectedItemClicked)
+            {
+                Margin = new(8, 8, 0, 8),
+                RequireHorizontalScroll = false,
+                RequireVerticalScroll = false,
+            };
             yield return new("フォント", "拡張編集", "", SelectedItemClicked);
             yield return new("ファイル", "PSDToolKit", "", SelectedItemClicked);
         }
@@ -207,6 +223,7 @@ namespace AupInfo.Wpf.ViewModels
                         region.RemoveAll();
                     }
                     disposables.Dispose();
+                    snackbarEvent.Unsubscribe(EnqueueSnackbarMessage);
                 }
                 disposedValue = true;
             }

@@ -1,5 +1,4 @@
-﻿using System.Reactive.Disposables;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using Karoterra.AupDotNet;
 using Karoterra.AupDotNet.ExEdit;
 using Reactive.Bindings;
@@ -7,7 +6,7 @@ using Reactive.Bindings.Extensions;
 
 namespace AupInfo.Core
 {
-    public class AupFile : IDisposable
+    public class AupFile : DisposableBase
     {
         public ReadOnlyReactivePropertySlim<string?> FilePath { get; }
         public ReadOnlyReactivePropertySlim<string?> FileName { get; }
@@ -20,7 +19,6 @@ namespace AupInfo.Core
 
         private readonly ReactivePropertySlim<string?> filepath;
         private AviUtlProject? aup = null;
-        private readonly CompositeDisposable disposables = new();
 
         public AupFile()
         {
@@ -82,29 +80,5 @@ namespace AupInfo.Core
             using BinaryWriter bw = new(fs);
             aup.Write(bw);
         }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    disposables.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

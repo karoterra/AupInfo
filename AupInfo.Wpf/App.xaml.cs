@@ -22,6 +22,7 @@ namespace AupInfo.Wpf
         {
             containerRegistry.RegisterForNavigation<EditHandlePanel>();
             containerRegistry.RegisterForNavigation<FilterProjectPanel>();
+            containerRegistry.RegisterForNavigation<ExEditScenePanel>();
 
             containerRegistry.RegisterSingleton<Services.SaveFileDialogService>();
         }
