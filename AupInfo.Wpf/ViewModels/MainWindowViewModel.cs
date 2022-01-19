@@ -210,7 +210,12 @@ namespace AupInfo.Wpf.ViewModels
                 RequireHorizontalScroll = false,
                 RequireVerticalScroll = false,
             };
-            yield return new("ファイル", "PSDToolKit", "", SelectedItemClicked);
+            yield return new("ファイル", "PSDToolKit", nameof(PsdToolKitPanel), SelectedItemClicked)
+            {
+                Margin = new(8, 8, 0, 8),
+                RequireHorizontalScroll = false,
+                RequireVerticalScroll = false,
+            };
         }
 
         #region IDisposable
