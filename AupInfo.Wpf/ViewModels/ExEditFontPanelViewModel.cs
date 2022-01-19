@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using AupInfo.Core;
-using AupInfo.Wpf.Repositories;
-using Karoterra.AupDotNet.ExEdit;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Reactive.Bindings;
@@ -15,28 +13,28 @@ namespace AupInfo.Wpf.ViewModels
         public ReadOnlyReactiveCollection<ExEditFontItemViewModel> Items { get; }
 
         private readonly CompositeDisposable disposables = new();
-        private readonly AupFile aup;
-        private readonly FontInfoRepository fontInfoRepository;
+        private readonly ExEditRepository repository;
         private readonly ObservableCollection<FontInfo> fonts = new();
 
-        public ExEditFontPanelViewModel(AupFile aup, FontInfoRepository fir)
+        public ExEditFontPanelViewModel(ExEditRepository exedit)
         {
-            this.aup = aup;
-            fontInfoRepository = fir;
+            repository = exedit;
 
             Items = fonts
                 .ToReadOnlyReactiveCollection(f => new ExEditFontItemViewModel(f))
                 .AddTo(disposables);
 
-            this.aup.ExEdit
-                .Subscribe(exedit => Update(exedit));
+            repository.Updated
+                .Subscribe(Update)
+                .AddTo(disposables);
+
+            Update();
         }
 
-        private void Update(ExEditProject? exedit)
+        private void Update()
         {
             fonts.Clear();
-            if (exedit == null) return;
-            fonts.AddRange(fontInfoRepository.GetAllFontInfo(exedit.Objects));
+            fonts.AddRange(repository.GetFontInfos());
         }
 
         public void Destroy()

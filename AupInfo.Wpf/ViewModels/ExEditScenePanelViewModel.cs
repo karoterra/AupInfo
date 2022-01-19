@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using AupInfo.Core;
 using AupInfo.Wpf.Services;
-using Karoterra.AupDotNet.ExEdit;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -16,33 +15,32 @@ namespace AupInfo.Wpf.ViewModels
         public ReadOnlyReactiveCollection<ExEditSceneItemViewModel> Items { get; }
 
         private readonly CompositeDisposable disposables = new();
-        private readonly AupFile aup;
+        private readonly ExEditRepository repository;
         private readonly SaveFileDialogService saveFileDialogService;
-        private readonly ObservableCollection<ExEditScene> scenes;
+        private readonly ObservableCollection<ExEditScene> scenes = new();
         private readonly MainSnackbarEvent snackbarEvent;
 
-        public ExEditScenePanelViewModel(AupFile aup, SaveFileDialogService sfds, IEventAggregator ea)
+        public ExEditScenePanelViewModel(ExEditRepository exedit, SaveFileDialogService sfds, IEventAggregator ea)
         {
-            this.aup = aup;
+            repository = exedit;
             saveFileDialogService = sfds;
             snackbarEvent = ea.GetEvent<MainSnackbarEvent>();
 
-            scenes = new();
             Items = scenes
                 .ToReadOnlyReactiveCollection(s => new ExEditSceneItemViewModel(
-                    s, this.aup.FilePath.Value!, saveFileDialogService, snackbarEvent))
+                    s, repository.AupPath.Value!, saveFileDialogService, snackbarEvent))
                 .AddTo(disposables);
-            this.aup.ExEdit
-                .Subscribe(exedit => Update(exedit))
+            repository.Updated
+                .Subscribe(Update)
                 .AddTo(disposables);
+
+            Update();
         }
 
-        private void Update(ExEditProject? exedit)
+        private void Update()
         {
             scenes.Clear();
-            if (exedit == null) return;
-            scenes.AddRange(exedit.Scenes
-                .Select(s => new ExEditScene(aup.EditHandle.Value!, exedit, s)));
+            scenes.AddRange(repository.GetScenes());
         }
 
         public void Destroy()

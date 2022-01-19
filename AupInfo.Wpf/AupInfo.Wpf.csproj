@@ -14,7 +14,6 @@
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
     <PackageReference Include="ReactiveProperty" Version="8.0.3" />
     <PackageReference Include="ReactiveProperty.WPF" Version="8.0.3" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

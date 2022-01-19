@@ -27,7 +27,6 @@ namespace AupInfo.Wpf
             containerRegistry.RegisterForNavigation<PsdToolKitPanel>();
 
             containerRegistry.RegisterSingleton<Services.SaveFileDialogService>();
-            containerRegistry.RegisterSingleton<Repositories.FontInfoRepository>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

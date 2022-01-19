@@ -12,6 +12,7 @@ namespace AupInfo.Core
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<AupFile>();
+            containerRegistry.RegisterSingleton<ExEditRepository>();
             containerRegistry.RegisterSingleton<PsdToolKitRepository>();
         }
     }
