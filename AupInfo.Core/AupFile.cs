@@ -1,6 +1,5 @@
 ﻿using System.Reactive.Linq;
 using Karoterra.AupDotNet;
-using Karoterra.AupDotNet.ExEdit;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -13,7 +12,6 @@ namespace AupInfo.Core
 
         public ReactivePropertySlim<EditHandle?> EditHandle { get; }
         public ReactiveCollection<FilterProject> FilterProjects { get; }
-        public ReactivePropertySlim<ExEditProject?> ExEdit { get; }
 
         public ReactiveCommand Opened { get; }
 
@@ -36,8 +34,6 @@ namespace AupInfo.Core
                 .AddTo(disposables);
             FilterProjects = new ReactiveCollection<FilterProject>()
                 .AddTo(disposables);
-            ExEdit = new ReactivePropertySlim<ExEditProject?>(null)
-                .AddTo(disposables);
 
             Opened = new ReactiveCommand()
                 .AddTo(disposables);
@@ -52,19 +48,12 @@ namespace AupInfo.Core
             FilterProjects.ClearOnScheduler();
             FilterProjects.AddRangeOnScheduler(aup.FilterProjects);
 
-            var filter = aup.FilterProjects.FirstOrDefault(f => f.Name == "拡張編集");
-            if (filter != null)
-            {
-                ExEdit.Value = new(filter.DumpData());
-            }
-
             Opened.Execute();
         }
 
         public void Close()
         {
             aup = null;
-            ExEdit.Value = null;
             EditHandle.Value = null;
             FilterProjects.ClearOnScheduler();
             filepath.Value = null;
