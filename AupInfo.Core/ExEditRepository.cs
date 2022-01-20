@@ -81,6 +81,15 @@ namespace AupInfo.Core
             return fontInfos;
         }
 
+        private static string? GetFileFromScript(ScriptFileEffect script)
+        {
+            if (script.Params == null) return null;
+
+            var file = script.Params.GetValueOrDefault("file");
+            if (file == null || file.Length < 2) return null;
+            return file[1..^1].Replace(@"\\", @"\");
+        }
+
         public List<ExEditFile> GetFiles()
         {
             if (exedit == null)
@@ -109,7 +118,7 @@ namespace AupInfo.Core
                         MaskEffect mask => (mask.Filename, mask.Type.Name),
                         DisplacementEffect displacement => (displacement.Filename, displacement.Type.Name),
                         PartialFilterEffect partialFilter => (partialFilter.Filename, partialFilter.Type.Name),
-                        ScriptFileEffect script => (script.Params?.GetValueOrDefault("file")?[1..^1].Replace(@"\\", @"\"), script.Type.Name),
+                        ScriptFileEffect script => (GetFileFromScript(script), script.Type.Name),
                         _ => (null, string.Empty),
                     };
                     if (!string.IsNullOrEmpty(path))
@@ -124,6 +133,58 @@ namespace AupInfo.Core
             }
 
             return files.ToList();
+        }
+
+        public List<ExEditScript> GetScripts()
+        {
+            if (exedit == null)
+            {
+                return new List<ExEditScript>();
+            }
+
+            HashSet<ExEditScript> scripts = new();
+            foreach (var obj in exedit.Objects)
+            {
+                if (obj.Chain) continue;
+                foreach (var effect in obj.Effects)
+                {
+                    ExEditScriptKind kind = ExEditScriptKind.Anm;
+                    string name = string.Empty;
+                    switch (effect)
+                    {
+                        case AnimationEffect anm:
+                            kind = ExEditScriptKind.Anm;
+                            name = string.IsNullOrEmpty(anm.Name) ? AnimationEffect.Defaults[anm.ScriptId] : anm.Name;
+                            break;
+                        case CustomObjectEffect coe:
+                            kind = ExEditScriptKind.Obj;
+                            name = string.IsNullOrEmpty(coe.Name) ? CustomObjectEffect.Defaults[coe.ScriptId] : coe.Name;
+                            break;
+                        case CameraEffect cam:
+                            kind = ExEditScriptKind.Cam;
+                            name = string.IsNullOrEmpty(cam.Name) ? CameraEffect.Defaults[cam.ScriptId] : cam.Name;
+                            break;
+                        case SceneChangeEffect scn when scn.Params != null:
+                            kind = ExEditScriptKind.Scn;
+                            name = scn.Name;
+                            break;
+                    }
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        scripts.Add(new ExEditScript(name, kind));
+                    }
+                    foreach (var track in effect.Trackbars)
+                    {
+                        if (track.Type == TrackbarType.Script)
+                        {
+                            name = exedit.TrackbarScripts[track.ScriptIndex].Name;
+                            scripts.Add(new ExEditScript(name, ExEditScriptKind.Tra));
+                        }
+                    }
+                }
+            }
+
+            return scripts.ToList();
         }
 
         private void Update()

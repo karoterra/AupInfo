@@ -216,6 +216,12 @@ namespace AupInfo.Wpf.ViewModels
                 RequireHorizontalScroll = false,
                 RequireVerticalScroll = false,
             };
+            yield return new("スクリプト", "拡張編集", nameof(ExEditScriptPanel), SelectedItemClicked)
+            {
+                Margin = new(0, 8, 0, 0),
+                RequireHorizontalScroll = false,
+                RequireVerticalScroll = false,
+            };
             yield return new("ファイル", "PSDToolKit", nameof(PsdToolKitPanel), SelectedItemClicked)
             {
                 Margin = new(8, 8, 0, 8),

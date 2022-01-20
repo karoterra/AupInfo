@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="AupInfo.Wpf.Views.ExEditScriptPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:vm="clr-namespace:AupInfo.Wpf.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:ExEditScriptPanelViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+  <Grid>
+    <DataGrid ItemsSource="{Binding Items}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.ScrollUnit="Pixel">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="種類"
+                            IsReadOnly="True"
+                            Binding="{Binding Kind.Value}"/>
+        <DataGridTextColumn Header="スクリプト名"
+                            IsReadOnly="True"
+                            Binding="{Binding Name.Value}"/>
+        <DataGridTextColumn Header="ファイル名"
+                            IsReadOnly="True"
+                            Binding="{Binding FileName.Value}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>
