@@ -33,7 +33,7 @@ namespace AupInfo.Core
             FrameNum = new ReactivePropertySlim<int>().AddTo(disposables);
 
             Name.Value = !string.IsNullOrEmpty(scene.Name) ? scene.Name : scene.SceneIndex == 0 ? "Root" : $"Scene {scene.SceneIndex}";
-            if (exedit.EditingScene == scene.SceneIndex)
+            if (scene.Width == 0)
             {
                 Width.Value = editHandle.Width;
                 Height.Value = editHandle.Height;
