@@ -81,6 +81,51 @@ namespace AupInfo.Core
             return fontInfos;
         }
 
+        public List<ExEditFile> GetFiles()
+        {
+            if (exedit == null)
+            {
+                return new List<ExEditFile>();
+            }
+
+            string projectDir = Path.GetDirectoryName(aup.FilePath.Value) ?? string.Empty;
+            HashSet<ExEditFile> files = new();
+            foreach (var obj in exedit.Objects)
+            {
+                if (obj.Chain) continue;
+                foreach (var effect in obj.Effects)
+                {
+                    (string? path, string type) = effect switch
+                    {
+                        VideoFileEffect video => (video.Filename, video.Type.Name),
+                        ImageFileEffect image => (image.Filename, image.Type.Name),
+                        AudioFileEffect audio => (audio.Filename, audio.Type.Name),
+                        WaveformEffect waveform => (waveform.Filename, waveform.Type.Name),
+                        ShadowEffect shadow => (shadow.Filename, shadow.Type.Name),
+                        BorderEffect border => (border.Filename, border.Type.Name),
+                        VideoCompositionEffect videoComp => (videoComp.Filename, videoComp.Type.Name),
+                        ImageCompositionEffect imageComp => (imageComp.Filename, imageComp.Type.Name),
+                        FigureEffect figure => (figure.Filename, figure.Type.Name),
+                        MaskEffect mask => (mask.Filename, mask.Type.Name),
+                        DisplacementEffect displacement => (displacement.Filename, displacement.Type.Name),
+                        PartialFilterEffect partialFilter => (partialFilter.Filename, partialFilter.Type.Name),
+                        ScriptFileEffect script => (script.Params?.GetValueOrDefault("file")?[1..^1].Replace(@"\\", @"\"), script.Type.Name),
+                        _ => (null, string.Empty),
+                    };
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        ExEditFileLocation location = File.Exists(path)
+                            ? ExEditFileLocation.Path
+                            : File.Exists(Path.Combine(projectDir, Path.GetFileName(path)))
+                                ? ExEditFileLocation.Project : ExEditFileLocation.NotFound;
+                        files.Add(new ExEditFile(path, type, location));
+                    }
+                }
+            }
+
+            return files.ToList();
+        }
+
         private void Update()
         {
             var filter = aup.FilterProjects
