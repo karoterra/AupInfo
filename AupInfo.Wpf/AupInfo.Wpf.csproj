@@ -6,6 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <AssemblyName>AupInfo</AssemblyName>
+    <Version>0.0.0</Version>
+    <Authors>karoterra</Authors>
+    <Copyright>Copyright (c) 2022 karoterra</Copyright>
+    <RepositoryUrl>https://github.com/karoterra/AupInfo</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/karoterra/AupInfo</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
