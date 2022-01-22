@@ -1,21 +1,18 @@
 ﻿using System.IO;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using AupInfo.Core;
-using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace AupInfo.Wpf.ViewModels
 {
-    public class ExEditFileItemViewModel : BindableBase, IDisposable
+    public class ExEditFileItemViewModel : ItemViewModelBase
     {
         public ReadOnlyReactivePropertySlim<string> FilePath { get; }
         public ReadOnlyReactivePropertySlim<string> FileName { get; }
         public ReadOnlyReactivePropertySlim<string> FileType { get; }
         public ReadOnlyReactivePropertySlim<string> Location { get; }
 
-        private readonly CompositeDisposable disposables = new();
         private readonly ExEditFile file;
 
         public ExEditFileItemViewModel(ExEditFile file)
@@ -43,29 +40,5 @@ namespace AupInfo.Wpf.ViewModels
                 .ToReadOnlyReactivePropertySlim<string>()
                 .AddTo(disposables);
         }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    disposables.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

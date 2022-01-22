@@ -1,14 +1,12 @@
 ﻿using System.IO;
-using System.Reactive.Disposables;
 using AupInfo.Core;
 using AupInfo.Wpf.Services;
-using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace AupInfo.Wpf.ViewModels
 {
-    public class ExEditSceneItemViewModel : BindableBase, IDisposable
+    public class ExEditSceneItemViewModel : ItemViewModelBase
     {
         public ReadOnlyReactivePropertySlim<string> Name { get; }
         public ReadOnlyReactivePropertySlim<int> Width { get; }
@@ -18,7 +16,6 @@ namespace AupInfo.Wpf.ViewModels
 
         public ReactiveCommand SaveButtonClick { get; }
 
-        private readonly CompositeDisposable disposables = new();
         private ExEditScene scene;
         private readonly string aupFilePath;
         private readonly SaveFileDialogService saveFileDialogService;
@@ -80,29 +77,5 @@ namespace AupInfo.Wpf.ViewModels
                 }
             }
         }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    disposables.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

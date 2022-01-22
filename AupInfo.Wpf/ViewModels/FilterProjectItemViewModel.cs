@@ -1,21 +1,17 @@
 ﻿using System.IO;
-using System.Reactive.Disposables;
 using AupInfo.Wpf.Services;
 using Karoterra.AupDotNet;
-using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace AupInfo.Wpf.ViewModels
 {
-    public class FilterProjectItemViewModel : BindableBase, IDisposable
+    public class FilterProjectItemViewModel : ItemViewModelBase
     {
         public ReactivePropertySlim<string> Name { get; }
         public ReactivePropertySlim<int> Size { get; }
 
         public AsyncReactiveCommand SaveButtonClick { get; }
-
-        private readonly CompositeDisposable disposables = new();
 
         private readonly FilterProject filter;
         private readonly string aupFilePath;
@@ -49,29 +45,5 @@ namespace AupInfo.Wpf.ViewModels
                 await File.WriteAllBytesAsync(setting.FileName, filter.DumpData());
             }
         }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    disposables.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

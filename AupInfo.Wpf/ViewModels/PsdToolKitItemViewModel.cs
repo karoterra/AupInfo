@@ -1,16 +1,14 @@
 ﻿using System.IO;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Media;
 using AupInfo.Core;
-using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace AupInfo.Wpf.ViewModels
 {
-    public class PsdToolKitItemViewModel : BindableBase, IDisposable
+    public class PsdToolKitItemViewModel : ItemViewModelBase
     {
         public ReactivePropertySlim<string?> FileName { get; }
         public ReactivePropertySlim<string?> FilePath { get; }
@@ -18,8 +16,7 @@ namespace AupInfo.Wpf.ViewModels
         public ReactivePropertySlim<int?> Tag { get; }
         public ReactivePropertySlim<ImageSource?> Thumbnail { get; }
 
-        private CompositeDisposable disposables = new();
-        private PsdToolKitItem item;
+        private readonly PsdToolKitItem item;
 
         public PsdToolKitItemViewModel(PsdToolKitItem item)
         {
@@ -35,29 +32,5 @@ namespace AupInfo.Wpf.ViewModels
             Thumbnail = new ReactivePropertySlim<ImageSource?>(this.item.Thumbnail == null ? null : ImageUtil.BitmapToBitmapSource(this.item.Thumbnail))
                 .AddTo(disposables);
         }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    disposables.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

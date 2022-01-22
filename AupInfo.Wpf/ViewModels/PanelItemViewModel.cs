@@ -1,12 +1,10 @@
-﻿using System.Reactive.Disposables;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Prism.Mvvm;
 
 namespace AupInfo.Wpf.ViewModels
 {
-    public class PanelItemViewModel : BindableBase, IDisposable
+    public class PanelItemViewModel : ItemViewModelBase
     {
         public string Name { get; } = string.Empty;
         public string Category { get; } = string.Empty;
@@ -21,8 +19,6 @@ namespace AupInfo.Wpf.ViewModels
 
         public ICommand PreviewMouseLeftButtonUp { get; }
 
-        private readonly CompositeDisposable disposables = new();
-
         public PanelItemViewModel(
             string name, string category, string navigation,
             ICommand previewMouseLeftButtonUp)
@@ -33,29 +29,5 @@ namespace AupInfo.Wpf.ViewModels
 
             PreviewMouseLeftButtonUp = previewMouseLeftButtonUp;
         }
-
-        #region IDisposable
-
-        private bool disposedValue;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    disposables.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }
