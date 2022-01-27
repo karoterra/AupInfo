@@ -21,6 +21,7 @@ namespace AupInfo.Wpf
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<EditHandlePanel>();
+            containerRegistry.RegisterForNavigation<FrameStatusPanel>();
             containerRegistry.RegisterForNavigation<FilterProjectPanel>();
             containerRegistry.RegisterForNavigation<ExEditScenePanel>();
             containerRegistry.RegisterForNavigation<ExEditFilePanel>();

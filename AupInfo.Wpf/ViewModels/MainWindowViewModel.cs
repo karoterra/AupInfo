@@ -192,6 +192,12 @@ namespace AupInfo.Wpf.ViewModels
         private IEnumerable<PanelItemViewModel> GetPanelItems()
         {
             yield return new("エディットハンドル", "", nameof(EditHandlePanel), SelectedItemClicked);
+            yield return new("フレーム情報", "", nameof(FrameStatusPanel), SelectedItemClicked)
+            {
+                Margin = new(0, 8, 0, 0),
+                RequireHorizontalScroll = false,
+                RequireVerticalScroll = false,
+            };
             yield return new("フィルタプラグイン", "", nameof(FilterProjectPanel), SelectedItemClicked)
             {
                 Margin = new Thickness(8, 8, 0, 8),
