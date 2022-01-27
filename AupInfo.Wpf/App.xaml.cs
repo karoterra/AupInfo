@@ -27,6 +27,7 @@ namespace AupInfo.Wpf
             containerRegistry.RegisterForNavigation<ExEditFontPanel>();
             containerRegistry.RegisterForNavigation<ExEditScriptPanel>();
             containerRegistry.RegisterForNavigation<ExEditFigurePanel>();
+            containerRegistry.RegisterForNavigation<ExEditTransitionPanel>();
             containerRegistry.RegisterForNavigation<PsdToolKitPanel>();
             containerRegistry.RegisterForNavigation<AboutPanel>();
 

@@ -217,6 +217,34 @@ namespace AupInfo.Core
 
             return figures.ToList();
         }
+        public List<ExEditTransition> GetTransitions()
+        {
+            if (exedit == null)
+            {
+                return new List<ExEditTransition>();
+            }
+
+            HashSet<ExEditTransition> figures = new();
+            foreach (var obj in exedit.Objects)
+            {
+                if (obj.Chain) continue;
+                foreach (var effect in obj.Effects)
+                {
+                    string name = effect switch
+                    {
+                        WipeEffect wipe => wipe.Filename,
+                        SceneChangeEffect scn when scn.Params == null => scn.Name,
+                        _ => string.Empty,
+                    };
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        figures.Add(new ExEditTransition(name, effect.Type.Name));
+                    }
+                }
+            }
+
+            return figures.ToList();
+        }
 
         private void Update()
         {
