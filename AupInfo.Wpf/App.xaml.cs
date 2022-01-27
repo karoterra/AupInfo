@@ -27,6 +27,7 @@ namespace AupInfo.Wpf
             containerRegistry.RegisterForNavigation<ExEditFontPanel>();
             containerRegistry.RegisterForNavigation<ExEditScriptPanel>();
             containerRegistry.RegisterForNavigation<PsdToolKitPanel>();
+            containerRegistry.RegisterForNavigation<AboutPanel>();
 
             containerRegistry.RegisterSingleton<Services.SaveFileDialogService>();
         }

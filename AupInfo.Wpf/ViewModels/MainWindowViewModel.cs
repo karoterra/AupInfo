@@ -228,6 +228,7 @@ namespace AupInfo.Wpf.ViewModels
                 RequireHorizontalScroll = false,
                 RequireVerticalScroll = false,
             };
+            yield return new("AupInfo について", "その他", nameof(AboutPanel), SelectedItemClicked);
         }
 
         #region IDisposable
