@@ -187,6 +187,37 @@ namespace AupInfo.Core
             return scripts.ToList();
         }
 
+        public List<ExEditFigure> GetFigures()
+        {
+            if (exedit == null)
+            {
+                return new List<ExEditFigure>();
+            }
+
+            HashSet<ExEditFigure> figures = new();
+            foreach (var obj in exedit.Objects)
+            {
+                if (obj.Chain) continue;
+                foreach (var effect in obj.Effects)
+                {
+                    string name = effect switch
+                    {
+                        FigureEffect fig when fig.NameType == FigureNameType.Figure => fig.Name,
+                        MaskEffect mask when mask.NameType == FigureNameType.Figure => mask.Name,
+                        DisplacementEffect disp when disp.NameType == FigureNameType.Figure => disp.Name,
+                        PartialFilterEffect part when part.NameType == FigureNameType.Figure => part.Name,
+                        _ => string.Empty,
+                    };
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        figures.Add(new ExEditFigure(name, effect.Type.Name));
+                    }
+                }
+            }
+
+            return figures.ToList();
+        }
+
         private void Update()
         {
             var filter = aup.FilterProjects
