@@ -10,8 +10,11 @@ insert_final_newline = true
 [*.xml]
 indent_size = 2
 
-[.json]
+[*.json]
 indent_size = 2
+
+[*.md]
+charset = utf-8
 
 [*.sln]
 indent_style = tab

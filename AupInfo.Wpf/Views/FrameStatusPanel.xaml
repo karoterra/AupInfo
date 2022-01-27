@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="AupInfo.Wpf.Views.FrameStatusPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:vm="clr-namespace:AupInfo.Wpf.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:FrameStatusPanelViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+  <Grid>
+    <DataGrid ItemsSource="{Binding Items}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              VirtualizingPanel.IsVirtualizing="True"
+              VirtualizingPanel.ScrollUnit="Pixel">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="#"
+                            IsReadOnly="True"
+                            Binding="{Binding Index}"/>
+        <DataGridTextColumn Header="Video"
+                            IsReadOnly="True"
+                            Binding="{Binding Video}"/>
+        <DataGridTextColumn Header="Audio"
+                            IsReadOnly="True"
+                            Binding="{Binding Audio}"/>
+        <DataGridTextColumn Header="Field2"
+                            IsReadOnly="True"
+                            Binding="{Binding Field2}"/>
+        <DataGridTextColumn Header="Field3"
+                            IsReadOnly="True"
+                            Binding="{Binding Field3}"/>
+        <DataGridTextColumn Header="Inter"
+                            IsReadOnly="True"
+                            Binding="{Binding Inter}"/>
+        <DataGridTextColumn Header="Index 24 fps"
+                            IsReadOnly="True"
+                            Binding="{Binding Index24Fps}"/>
+        <DataGridTextColumn Header="EditFlag"
+                            IsReadOnly="True"
+                            Binding="{Binding EditFlag}"/>
+        <DataGridTextColumn Header="Config"
+                            IsReadOnly="True"
+                            Binding="{Binding Config}"/>
+        <DataGridTextColumn Header="Vcm"
+                            IsReadOnly="True"
+                            Binding="{Binding Vcm}"/>
+        <DataGridTextColumn Header="Clip"
+                            IsReadOnly="True"
+                            Binding="{Binding Clip}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</UserControl>

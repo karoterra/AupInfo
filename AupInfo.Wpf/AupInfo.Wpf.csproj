@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>AupInfo</AssemblyName>
+    <Version>0.1.0</Version>
+    <Authors>karoterra</Authors>
+    <Copyright>Copyright (c) 2022 karoterra</Copyright>
+    <RepositoryUrl>https://github.com/karoterra/AupInfo</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/karoterra/AupInfo</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.0" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AupInfo.Core\AupInfo.Core.csproj" />
+  </ItemGroup>
+
+</Project>
