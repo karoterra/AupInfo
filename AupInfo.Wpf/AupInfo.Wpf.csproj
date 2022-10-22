@@ -16,10 +16,10 @@
 
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.0" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.2.5" />
+    <PackageReference Include="Octokit" Version="4.0.1" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
-    <PackageReference Include="ReactiveProperty.WPF" Version="8.0.3" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
   </ItemGroup>
 
   <ItemGroup>
