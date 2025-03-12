@@ -5,7 +5,7 @@
 
 ## インストール
 
-0. AupInfo の動作には [.NET 6.0 ランタイム](https://dotnet.microsoft.com/ja-jp/download/dotnet/6.0)
+0. AupInfo の動作には [.NET 8.0 ランタイム](https://dotnet.microsoft.com/ja-jp/download/dotnet/8.0/runtime)
    が必要です。あらかじめインストールしてください。
 1. [Releases](https://github.com/karoterra/AupInfo/releases) から最新版の ZIP ファイルをダウンロードしてください。
 2. ZIP ファイルを好きな場所に展開してください。

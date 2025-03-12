@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AssemblyName>AupInfo</AssemblyName>
-    <Version>0.1.1</Version>
+    <Version>0.2.0</Version>
     <Authors>karoterra</Authors>
     <Copyright>Copyright (c) 2022 karoterra</Copyright>
     <RepositoryUrl>https://github.com/karoterra/AupInfo</RepositoryUrl>
