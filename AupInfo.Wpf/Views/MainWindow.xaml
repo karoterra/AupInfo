@@ -116,7 +116,7 @@
       <DockPanel>
         <md:ColorZone Padding="16"
                       DockPanel.Dock="Top"
-                      md:ShadowAssist.ShadowDepth="Depth2"
+                      md:ElevationAssist.Elevation="Dp4"
                       Mode="PrimaryLight">
           <DockPanel>
             <StackPanel Orientation="Horizontal">
